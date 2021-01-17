@@ -1,5 +1,6 @@
-import Bitmap from './models/bitmap';
-import MatrixReader from './parser';
+import Bitmap from './models/bitmap/bitmap';
+import MatrixReader from './parser/parser';
+import * as CONFIG from './config';
 
 const main = async () => {
     let filePath: string | null = null;
@@ -17,15 +18,15 @@ const main = async () => {
     }
 
     try {
-        const matrixReader = new MatrixReader(filePath);
+        const matrixReader = new MatrixReader(CONFIG, filePath);
         await matrixReader.read();
 
         matrixReader.matrixArray.forEach((matrix) => {
-            const bitmap = new Bitmap(matrix.values);
+            const bitmap = new Bitmap(matrix);
             bitmap.printDistanceMatrix();
         });
     } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
     }
 };
 

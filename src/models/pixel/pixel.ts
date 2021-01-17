@@ -5,9 +5,6 @@ export default class Pixel {
     private distanceToNextWhitePixel: number;
 
     constructor(x: number, y: number, value: number) {
-        if (![0, 1].includes(value)) {
-            throw new PixelError('Pixel value is not 0 or 1');
-        }
         this.x = x;
         this.y = y;
         this.value = value;
@@ -43,13 +40,5 @@ export default class Pixel {
 
     printDistance(): void {
         process.stdout.write(`${this.distanceToNextWhitePixel}`);
-    }
-}
-
-class PixelError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = this.constructor.name;
-        Error.captureStackTrace(this, this.constructor);
     }
 }
