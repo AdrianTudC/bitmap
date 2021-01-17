@@ -11,7 +11,8 @@
             "program": "${workspaceFolder}/src/main.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-            "outputCapture": "std"
+            "outputCapture": "std",
+            "args": ["-f", "data/baseCase"]
         }
     ]
 }
