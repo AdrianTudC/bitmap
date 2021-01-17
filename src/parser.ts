@@ -3,7 +3,7 @@ import * as readline from 'readline';
 
 export type matrix = { height: number; width: number; values: number[][] };
 
-export class MatrixReader {
+export default class MatrixReader {
     private readInterface: readline.Interface;
     matrixArray: matrix[] = [];
 
@@ -102,8 +102,6 @@ export class MatrixReader {
             }
             throw new Error('Incorrect input format');
         }
-
-        console.info('\nDone reading');
     }
 }
 
