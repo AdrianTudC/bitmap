@@ -77,6 +77,7 @@ export default class Bitmap {
             }
             process.stdout.write('\n');
         }
+        process.stdout.write('\n');
     }
 
     /**
@@ -90,5 +91,6 @@ export default class Bitmap {
             }
             process.stdout.write('\n');
         }
+        process.stdout.write('\n');
     }
 }
