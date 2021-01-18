@@ -7,7 +7,7 @@
     "license": "UNLICENSED",
     "scripts": {
         "prebuild": "rimraf dist",
-        "build": "tsc -p tsconfig.json",
+        "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "tsc && node dist/main.js",
         "startFile": "tsc && node dist/main.js -f data/baseCase",
