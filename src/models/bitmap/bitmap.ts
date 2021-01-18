@@ -1,14 +1,20 @@
-import { MATRIX_VALUES } from '../../config';
+import { ALLOWED_MATRIX_VALUES } from '../../config';
 import Pixel from '../pixel/pixel';
 
 import * as BitmapErrors from './bitmapErrors';
 
+/** @module Bitmap */
 export default class Bitmap {
     private height: number;
     private width: number;
     private whitePixels: Pixel[];
     private matrix: Pixel[][];
 
+    /**
+     * Represents a bitmap made of Pixels
+     * @constructor
+     * @param {number[][]} values - a matrix of numeric values
+     */
     constructor(values: number[][]) {
         if (!values.map((row) => row.length).every((l) => l === values[0].length)) {
             throw new BitmapErrors.BitmapRowError();
@@ -21,7 +27,7 @@ export default class Bitmap {
         for (let row = 0; row < this.height; row++) {
             const pixelArray: Pixel[] = [];
             for (let column = 0; column < this.width; column++) {
-                if (!MATRIX_VALUES.includes(values[row][column])) {
+                if (!ALLOWED_MATRIX_VALUES.includes(values[row][column])) {
                     throw new BitmapErrors.BitmapValueError();
                 }
                 const pixel = new Pixel(row, column, values[row][column]);
@@ -36,6 +42,10 @@ export default class Bitmap {
         this.computePixelDistances();
     }
 
+    /**
+     * Computes distances to the closest white pixel for all pixels.
+     * @method
+     */
     private computePixelDistances(): void {
         for (let row = 0; row < this.height; row++) {
             for (let column = 0; column < this.width; column++) {
@@ -51,6 +61,12 @@ export default class Bitmap {
         }
     }
 
+    /**
+     * Prints a matrix of distances where A[i][j] is the distance from the
+     * A[i][j] pixel to the closest white pixel with a whitespace in-between
+     * values on the same row
+     * @method
+     */
     printDistanceMatrix(): void {
         for (let row = 0; row < this.height; row++) {
             for (let column = 0; column < this.width; column++) {
@@ -63,6 +79,10 @@ export default class Bitmap {
         }
     }
 
+    /**
+     * Prints the bitmap
+     * @method
+     */
     printBitmap(): void {
         for (let row = 0; row < this.height; row++) {
             for (let column = 0; column < this.width; column++) {

@@ -13,7 +13,8 @@
         "startFile": "tsc && node dist/main.js -f data/baseCase",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "test": "jest",
-        "test:coverage": "jest --collect-coverage"
+        "test:coverage": "jest --collect-coverage",
+        "docs": "jsdoc -c jsdoc.json --readme ./README.md"
     },
     "dependencies": {
         "rimraf": "^3.0.2"
@@ -23,10 +24,12 @@
         "@types/node": "^14.14.21",
         "@typescript-eslint/eslint-plugin": "^4.13.0",
         "@typescript-eslint/parser": "^4.13.0",
+        "better-docs": "^2.3.2",
         "eslint": "^7.12.1",
         "eslint-config-prettier": "7.0.0",
         "eslint-plugin-prettier": "^3.1.4",
         "jest": "^26.6.3",
+        "jsdoc": "^3.6.6",
         "prettier": "^2.2.1",
         "ts-jest": "^26.4.4",
         "tsconfig-paths": "^3.9.0",

@@ -7,7 +7,7 @@ const config = {
     MAX_TEST_CASE_COUNT: 1000,
     MIN_MATRIX_SIZE: 1,
     MAX_MATRIX_SIZE: 182,
-    MATRIX_VALUES: [0, 1],
+    ALLOWED_MATRIX_VALUES: [0, 1],
 };
 
 describe('Bitmap', () => {
@@ -76,9 +76,9 @@ describe('Bitmap', () => {
     it('should fail if matrix is all zeros', async () => {
         try {
             const matrixReader = new MatrixReader(config, 'data/allZeroMatrix');
-            await matrixReader.read();
+            const matrixArray = await matrixReader.read();
 
-            expect(matrixReader.matrixArray.map(matrixAllZeros)).toBe(true);
+            expect(matrixArray.map(matrixAllZeros)).toBe(true);
         } catch (e) {
             const errorType = e instanceof MatrixReaderErrors.EmptyMatrix;
             expect(errorType).toBe(true);

@@ -30,7 +30,7 @@ export class MatrixSizeOob extends BaseMatrixReaderError {
 
 export class InvalidMatrixValue extends BaseMatrixReaderError {
     constructor() {
-        super(`One of the given matrix values is not in ${CONFIG.MATRIX_VALUES}`);
+        super(`One of the given matrix values is not in ${CONFIG.ALLOWED_MATRIX_VALUES}`);
     }
 }
 

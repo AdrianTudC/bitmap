@@ -9,14 +9,26 @@ type config = {
     MAX_TEST_CASE_COUNT: number;
     MIN_MATRIX_SIZE: number;
     MAX_MATRIX_SIZE: number;
-    MATRIX_VALUES: number[];
+    ALLOWED_MATRIX_VALUES: number[];
 };
 
+/**
+ * @typedef {Object} MatrixSize
+ * @property {number} height - Number of rows in the matrix
+ * @property {number} width - Number of columns in the matrix
+ */
+
+/** @module MatrixReader */
 export default class MatrixReader {
     private readInterface: readline.Interface;
     private config: config;
-    matrixArray: number[][][] = [];
 
+    /**
+     * Represents a parser that reads input from stdin or file
+     * and outputs a matrix
+     * @constructor
+     * @param {number[][]} values - a matrix of numbers
+     */
     constructor(config: config, filePath?: string) {
         if (filePath) {
             this.readInterface = readline.createInterface(fs.createReadStream(filePath));
@@ -26,6 +38,12 @@ export default class MatrixReader {
         this.config = config;
     }
 
+    /**
+     * Parses the number of matrixes that will be read from the input stream
+     * @method
+     * @param {string} line - current line
+     * @return {number} - the amount of matrixes to be read
+     */
     private parseTestCasesCount(line: string): number {
         const testCasesCount = parseInt(line);
         if (Number.isNaN(testCasesCount)) {
@@ -37,6 +55,13 @@ export default class MatrixReader {
         return testCasesCount;
     }
 
+    /**
+     * Parses height followed by the width of the current matrix
+     * separated by a whitespace
+     * @method
+     * @param {string} line - current line
+     * @return {MatrixSize} - The size of the matrix to be read
+     */
     private parseMatrixSize(line: string): { height: number; width: number } {
         const matrixSize = line.split(' ');
         const height = parseInt(matrixSize[0]);
@@ -55,11 +80,17 @@ export default class MatrixReader {
         return { height, width };
     }
 
+    /**
+     * Parses a row of values from the current matrix
+     * @method
+     * @param {string} line - current line
+     * @return {number[]} - A row of values in the current matrix
+     */
     private parseMatrixRowValues(line: string): number[] {
         if (
             line
                 .split('')
-                .map((value) => !this.config.MATRIX_VALUES.includes(parseInt(value)))
+                .map((value) => !this.config.ALLOWED_MATRIX_VALUES.includes(parseInt(value)))
                 .reduce((sum, value) => sum || value, false)
         ) {
             throw new MatrixReaderErrors.InvalidMatrixValue();
@@ -67,7 +98,15 @@ export default class MatrixReader {
         return line.split('').map((value) => parseInt(value));
     }
 
-    async read(): Promise<void> {
+    /**
+     * Consumes input from the read interface and turns it into an
+     * array of matrix
+     * @method
+     * @return {Promise<number[][][]>} - A promise that returns an array
+     * of matrix with numerical values
+     */
+    async read(): Promise<number[][][]> {
+        const matrixArray: number[][][] = [];
         let testCasesCount = 0;
         let matrixLinesRead = 0;
         let currentMatrixHeight = 0;
@@ -92,17 +131,19 @@ export default class MatrixReader {
                     if (matrixAllZeros(currentMatrix)) {
                         throw new MatrixReaderErrors.EmptyMatrix();
                     }
-                    this.matrixArray.push(currentMatrix);
+                    matrixArray.push(currentMatrix);
                     matrixLinesRead = 0;
                     currentMatrixHeight = 0;
                     currentMatrixWidth = 0;
                     currentMatrix = [];
                 }
 
-                if (this.matrixArray.length === testCasesCount) {
+                if (matrixArray.length === testCasesCount) {
                     break;
                 }
             }
+
+            return matrixArray;
         } catch (err) {
             if (err instanceof MatrixReaderErrors.BaseMatrixReaderError) {
                 throw err;

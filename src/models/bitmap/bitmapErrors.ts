@@ -1,4 +1,4 @@
-import { MATRIX_VALUES } from '../../config';
+import { ALLOWED_MATRIX_VALUES } from '../../config';
 
 export class BaseBitmapError extends Error {
     constructor(message: string) {
@@ -16,6 +16,6 @@ export class BitmapRowError extends BaseBitmapError {
 
 export class BitmapValueError extends BaseBitmapError {
     constructor() {
-        super(`Given matrix contains a value not in ${MATRIX_VALUES}`);
+        super(`Given matrix contains a value not in ${ALLOWED_MATRIX_VALUES}`);
     }
 }

@@ -19,9 +19,9 @@ const main = async () => {
 
     try {
         const matrixReader = new MatrixReader(CONFIG, filePath);
-        await matrixReader.read();
+        const matrixArray = await matrixReader.read();
 
-        matrixReader.matrixArray.forEach((matrix) => {
+        matrixArray.forEach((matrix) => {
             const bitmap = new Bitmap(matrix);
             bitmap.printDistanceMatrix();
         });
