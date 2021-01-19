@@ -74,7 +74,8 @@ Successive calls of this command will empty the `dist` folder before rebuilding.
 ### Testing
 
 `npm run test` will run the complete test suite
-`npm run test:coverage` do test coverage
+
+`npm run test:coverage` does test coverage
 
 ### Documentation
 
