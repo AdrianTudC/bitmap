@@ -26,4 +26,30 @@ describe('Parser and Bitmap integration', () => {
             expect(distanceBFS).toStrictEqual(distanceNaive);
         });
     });
+
+    it(`should properly clear the matrix when recomputing the distance matrix`, async () => {
+        const matrixReader = new MatrixReader(config, 'data/baseCase');
+        const matrixArray = await matrixReader.read();
+        matrixArray.forEach((matrix) => {
+            const bitmap = new Bitmap(matrix);
+
+            bitmap.computeDistanceMatrix();
+            const bfsDistances = bitmap.getDistanceMatrix();
+
+            bitmap.computeDistanceMatrixNaive();
+            const naiveDistances = bitmap.getDistanceMatrix();
+
+            expect(bfsDistances).toStrictEqual(naiveDistances);
+
+            bitmap.computeDistanceMatrix();
+            const secondBfsDistances = bitmap.getDistanceMatrix();
+
+            expect(bfsDistances).toStrictEqual(secondBfsDistances);
+
+            bitmap.computeDistanceMatrixNaive();
+            const secondNaiveDistances = bitmap.getDistanceMatrix();
+
+            expect(secondBfsDistances).toStrictEqual(secondNaiveDistances);
+        });
+    });
 });
