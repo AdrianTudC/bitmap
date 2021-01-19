@@ -3,7 +3,7 @@ export default class Pixel {
     private x: number;
     private y: number;
     private value: number;
-    private minDistanceToNextWhitePixel: number;
+    private visited: boolean = false;
 
     /**
      * Represents a pixel.
@@ -19,12 +19,11 @@ export default class Pixel {
     }
 
     /**
-     * Sets the minimal distance between this pixel and the next white pixel.
+     * Marks the pixel as visited
      * @method
-     * @param {number} distance - The distance to be set.
      */
-    setDistanceToNextWhitePixel(distance: number): void {
-        this.minDistanceToNextWhitePixel = distance;
+    setVisited(v: boolean): void {
+        this.visited = v;
     }
 
     /**
@@ -34,6 +33,15 @@ export default class Pixel {
      */
     isWhite(): boolean {
         return this.value === 1;
+    }
+
+    /**
+     * Checks if the pixel has been visited by the BFS algorithm
+     * @method
+     * @returns {boolean} true if the pixel has been visited
+     */
+    isVisited(): boolean {
+        return this.visited;
     }
 
     /**
@@ -65,27 +73,10 @@ export default class Pixel {
     }
 
     /**
-     * Gets the distance to the nearest white pixel
-     * @method
-     * @returns {number} the distance to the nearest white pixel
-     */
-    getDistance(): number {
-        return this.minDistanceToNextWhitePixel;
-    }
-
-    /**
      * Prints the pixel value to stdout
      * @method
      */
     printValue(): void {
         process.stdout.write(`${this.value}`);
-    }
-
-    /**
-     * Prints the minimal distance to a white pixel to stdout
-     * @method
-     */
-    printDistance(): void {
-        process.stdout.write(`${this.minDistanceToNextWhitePixel}`);
     }
 }

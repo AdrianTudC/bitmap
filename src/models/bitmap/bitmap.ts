@@ -9,6 +9,7 @@ export default class Bitmap {
     private width: number;
     private whitePixels: Pixel[];
     private matrix: Pixel[][];
+    private distanceMatrix: number[][];
 
     /**
      * Represents a bitmap made of Pixels
@@ -38,25 +39,97 @@ export default class Bitmap {
             }
             this.matrix.push(pixelArray);
         }
-
-        this.computePixelDistances();
     }
 
     /**
-     * Computes distances to the closest white pixel for all pixels.
+     * Computes distances to the closest white pixel for all pixels using the naive method.
      * @method
      */
-    private computePixelDistances(): void {
+    computeDistanceMatrixNaive(): void {
+        this.distanceMatrix = new Array(this.height);
+        for (let i = 0; i < this.distanceMatrix.length; i++) {
+            this.distanceMatrix[i] = new Array(this.width);
+        }
+
         for (let row = 0; row < this.height; row++) {
             for (let column = 0; column < this.width; column++) {
                 const currentPixel = this.matrix[row][column];
                 if (currentPixel.isWhite()) {
-                    currentPixel.setDistanceToNextWhitePixel(0);
+                    this.distanceMatrix[row][column] = 0;
                 } else {
                     const distances = this.whitePixels.map((whitePixel) => currentPixel.getDistanceTo(whitePixel));
                     const minDistance = Math.min.apply(Math, distances);
-                    currentPixel.setDistanceToNextWhitePixel(minDistance);
+                    this.distanceMatrix[row][column] = minDistance;
                 }
+            }
+        }
+    }
+
+    /**
+     * Computes distances to the closest white pixel for all pixels using BFS algorithm.
+     * @method
+     */
+    computeDistanceMatrix() {
+        this.clearVisited();
+
+        const visitNeighbour = (row: number, column: number): void => {
+            if (row >= 0 && row < this.height && column >= 0 && column < this.width) {
+                if (!this.matrix[row][column].isWhite() && !this.matrix[row][column].isVisited()) {
+                    queue.push(this.matrix[row][column]);
+                    this.matrix[row][column].setVisited(true);
+                }
+            }
+        };
+
+        this.distanceMatrix = new Array(this.height);
+        for (let i = 0; i < this.distanceMatrix.length; i++) {
+            this.distanceMatrix[i] = new Array(this.width);
+            for (let j = 0; j < this.distanceMatrix[i].length; j++) {
+                this.distanceMatrix[i][j] = 0;
+            }
+        }
+
+        let minDistance = 0;
+
+        const queue = this.whitePixels.slice();
+
+        while (queue.length !== 0) {
+            const queueSize = queue.length;
+
+            for (let i = 0; i < queueSize; i++) {
+                const currentPixel = queue.shift();
+                this.distanceMatrix[currentPixel.getX()][currentPixel.getY()] = minDistance;
+                // left neighbour
+                visitNeighbour(currentPixel.getX(), currentPixel.getY() - 1);
+                // right neighbour
+                visitNeighbour(currentPixel.getX(), currentPixel.getY() + 1);
+                // top neighbour
+                visitNeighbour(currentPixel.getX() - 1, currentPixel.getY());
+                // bottom neighbour
+                visitNeighbour(currentPixel.getX() + 1, currentPixel.getY());
+            }
+
+            minDistance++;
+        }
+    }
+
+    /**
+     * Gets the distance matrix
+     * @method
+     * @returns {number[][]} the distance matrix
+     */
+    getDistanceMatrix(): number[][] {
+        return this.distanceMatrix;
+    }
+
+    /**
+     * Sets all pixels as not visited by the BFS algorithm
+     * @method
+     */
+    private clearVisited(): void {
+        for (let row = 0; row < this.height; row++) {
+            for (let column = 0; column < this.width; column++) {
+                this.matrix[row][column].setVisited(false);
             }
         }
     }
@@ -70,7 +143,7 @@ export default class Bitmap {
     printDistanceMatrix(): void {
         for (let row = 0; row < this.height; row++) {
             for (let column = 0; column < this.width; column++) {
-                this.matrix[row][column].printDistance();
+                process.stdout.write(`${this.distanceMatrix[row][column]}`);
                 if (column < this.width - 1) {
                     process.stdout.write(' ');
                 }

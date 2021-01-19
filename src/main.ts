@@ -20,10 +20,17 @@ const main = async () => {
     try {
         const matrixReader = new MatrixReader(CONFIG, filePath);
         const matrixArray = await matrixReader.read();
-
         matrixArray.forEach((matrix) => {
             const bitmap = new Bitmap(matrix);
+            // this is fast
+            bitmap.computeDistanceMatrix();
             bitmap.printDistanceMatrix();
+            // can retrieve distance matrix like this
+            // console.log(bitmap.getDistanceMatrix());
+
+            // this is slower
+            // bitmap.computeDistanceMatrixNaive();
+            // bitmap.printDistanceMatrix();
         });
     } catch (err) {
         console.error(err.message);
