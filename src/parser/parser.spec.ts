@@ -76,9 +76,7 @@ describe('Bitmap', () => {
     it('should fail if matrix is all zeros', async () => {
         try {
             const matrixReader = new MatrixReader(config, 'data/allZeroMatrix');
-            const matrixArray = await matrixReader.read();
-
-            expect(matrixArray.map(matrixAllZeros)).toBe(true);
+            await matrixReader.read();
         } catch (e) {
             const errorType = e instanceof MatrixReaderErrors.EmptyMatrix;
             expect(errorType).toBe(true);
