@@ -64,6 +64,9 @@ export default class MatrixReader {
      */
     private parseMatrixSize(line: string): { height: number; width: number } {
         const matrixSize = line.split(' ');
+        if (matrixSize.length > 2) {
+            throw new MatrixReaderErrors.InvalidMatrixSizes();
+        }
         const height = parseInt(matrixSize[0]);
         const width = parseInt(matrixSize[1]);
         if (Number.isNaN(height) || Number.isNaN(width)) {

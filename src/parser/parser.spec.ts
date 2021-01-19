@@ -58,6 +58,16 @@ describe('Bitmap', () => {
         }
     });
 
+    it('should fail if given too many values in the matrix sizes line', async () => {
+        try {
+            const matrixReader = new MatrixReader(config, 'data/badMatrixSizes');
+            await matrixReader.read();
+        } catch (e) {
+            const errorType = e instanceof MatrixReaderErrors.InvalidMatrixSizes;
+            expect(errorType).toBe(true);
+        }
+    });
+
     it('should properly check if matrix is empty', () => {
         const zeroMatrix = [
             [0, 0, 0],

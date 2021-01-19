@@ -45,3 +45,9 @@ export class EmptyMatrix extends BaseMatrixReaderError {
         super('Matrix has all values 0');
     }
 }
+
+export class InvalidMatrixSizes extends BaseMatrixReaderError {
+    constructor() {
+        super('Invalid matrix sizes input');
+    }
+}
